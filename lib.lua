@@ -7,11 +7,6 @@
  You are free to use, distribute, and share the Syn-X-Functions project as long as you provide proper attribution to the original creator. 
  However, you may not modify, remix, or fork this project in any way. Redistribution of the work is only allowed in its original, unaltered form. 
  All users must credit the creator when using the project, and no derivative works or adaptations are permitted.
-]]
-
-
---[[
- REQUIREMENTS:
 
  - A level 3-8 internal-external (not possible on external since you need getreg which is implemented internally)
  - 1 byte of ram
@@ -56,6 +51,10 @@ function syn.cache_invalidate(invalidated_Cache: Instance)
 	-- owner of sUNC [senS], 2025.
 end
 
+function gethwid()
+   return string.char(math.random(32, 64))
+end
+
 function syn.cache_replace(Cache1: Instance, Cache2: Instance)
 	syn.insert(syn.Cached, Cache1, syn.Cached, Cache2);
 	if cache and cache.replace then return cache.replace(Cache1, Cache2) end
@@ -80,7 +79,7 @@ end
 
 function syn.request(options: table)
 	local hwid
-	if gethwid then hwid = gethwid() else hwid = string.char(math.random(32, 64)) end
+	if gethwid then hwid = gethwid() end
 	local user = tostring(game:GetService("Players").LocalPlayer.Name) or tostring(game:GetService("Players").LocalPlayer.DisplayName)
 	if env.request or request then
 		options['Syn-Fingerprint'] = hwid
@@ -232,8 +231,6 @@ end
 		if loadstring then setfenv(loadstring(scr), newEnv)() else return NULL end
 	end
 
-
-
 	function syn.get_thread_identity()
 		return tonumber(identity)
 	end
@@ -248,18 +245,22 @@ end
 			Text = T2,
 			Icon = image or NULL
 		})
-		-- Reminder: This is a synapse z function
 	end
 
-	function syn.kill_process()
-		-- you cannot do this in lua, so just make them exit the game [some exploits have game:Shutdown() blocked, so just pcall it]
-		local a,b = pcall(function() return game:Shutdown() end)
-		if not a then return NULL end
+	function syn.kill_process(number, message) -- docs aren't needed here. -- usage: syn.kill_proccess
+		local function exit(string) game.Players.LocalPlayer:Kick(string) end
+		if number or number and message == nil then
+		if not getcallingscript then exit("syn.kill_process was invoked.") end
+		if number == 0 then exit("Engine exited with code 0.") end -- nothing is wrong
+		if number == 1 then if message == nil then exit("Engine exited with code 1.") else exit("Engine exited with code 1.\n" .. message) end -- general error
+		if number not == 1 or == 0 then if message == nil then exit("Engine exited with code " .. number .. ".") else exit("Engine exited with code " .. number .. "." .. "\n" .. message) end -- custom exit
+		if number > 255 then exit("Engine cannot exit with a >255 code.") -- yes im stealing from linux with this, and what?
 	end
 
 
 	function syn.isreadonly(main: table): boolean
 		-- hi
+						-- hi hru wsh?
 		if env.isreadonly or isreadonly then return isreadonly(main) else return table.isfrozen(main) end
 	end
 
@@ -268,4 +269,4 @@ end
 		return NULL
 	end
 
-	return syn
+	return syn -- modified by irib
