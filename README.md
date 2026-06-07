@@ -1,10 +1,10 @@
-# Synapse + Syn Function Support For Your Exploits
-
+# synapse function support for exploots
 made by your dearest wish
-
 to use this just do
 
 ```lua
-local syn = loadstring(game:HttpGet("https://raw.githubusercontent.com/wis-h/Syn-X-Functions/refs/heads/main/syn_main.luau"))()
-local Syn = syn; -- doesnt matter which var you do, just use syn and not Syn
+local syn = loadstring(game:HttpGet("https://raw.githubusercontent.com/justirib/syn-funcs/refs/heads/main/syn_main.luau"))()
+local Syn = syn; -- doesnt matter which var you do, just use syn and not syn
 ```
+
+i'll prob end up modding this eventually
